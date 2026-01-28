@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" href="https://pusha.muijakarta.or.id/img/logo.png">
     
     <title>PUSHA - Pusat Studi Hadis</title>
-    <!-- Menggunakan CDN Tailwind untuk styling cepat -->
+    <!-- Menggunakan CDN Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
@@ -63,7 +63,7 @@
         background: transparent;
       }
       
-      /* Indikator Loading: Muncul hanya jika React belum mengambil alih div#root */
+      /* Indikator Loading */
       #root:empty {
         display: flex;
         justify-content: center;
@@ -87,7 +87,8 @@
         100% { opacity: 0.5; }
       }
     </style>
-  <script type="importmap">
+    <!-- Importmap dihapus untuk mencegah konflik -->
+<script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.2.4",
@@ -103,6 +104,6 @@
 </head>
   <body class="bg-slate-50 text-slate-800 antialiased overflow-hidden">
     <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
