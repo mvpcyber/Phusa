@@ -1,0 +1,7 @@
+{
+  "name": "PUSHA",
+  "description": "PUSHA (Pusat Studi Hadis) - Aplikasi mobile web Islami komprehensif yang menampilkan Hadis, Kitab, Waktu Sholat, dan inspirasi harian.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
