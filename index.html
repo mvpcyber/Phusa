@@ -6,11 +6,11 @@
     <meta name="theme-color" content="#ffffff"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <link rel="apple-touch-icon" href="https://pusha.muijakarta.or.id/img/logo.png">
     
     <title>PUSHA - Pusat Studi Hadis</title>
-    <!-- Menggunakan CDN Tailwind -->
+    <!-- Menggunakan CDN Tailwind untuk styling cepat -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
@@ -35,19 +35,13 @@
         background-color: #f8fafc;
       }
       
-      /* Light Theme Card Style (Previously Liquid Glass) */
+      /* Light Theme Card Style */
       .liquid-glass {
         background: #ffffff;
-        border: 1px solid #e2e8f0; /* Slate 200 */
+        border: 1px solid #e2e8f0;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
       }
       
-      .liquid-glass-dark {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      }
-
       .glass-btn {
         background: rgba(255, 255, 255, 0.9);
         border: 1px solid rgba(255, 255, 255, 0.5);
@@ -60,15 +54,37 @@
         transform: scale(0.95);
       }
       
-      /* Helper untuk text contrast di header image */
       .text-shadow {
         text-shadow: 0 2px 4px rgba(0,0,0,0.3);
       }
 
-      /* Custom Scrollbar for hidden feel */
       ::-webkit-scrollbar {
         width: 0px;
         background: transparent;
+      }
+      
+      /* Indikator Loading: Muncul hanya jika React belum mengambil alih div#root */
+      #root:empty {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #f8fafc;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      #root:empty::after {
+        content: "Memuat Aplikasi...";
+        color: #2f486d;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        animation: pulse 1.5s infinite;
+      }
+      @keyframes pulse {
+        0% { opacity: 0.5; }
+        50% { opacity: 1; }
+        100% { opacity: 0.5; }
       }
     </style>
   <script type="importmap">
@@ -79,14 +95,14 @@
     "react/": "https://esm.sh/react@^19.2.4/",
     "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
     "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-    "vite": "https://esm.sh/vite@^7.3.1"
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }
 }
 </script>
 </head>
   <body class="bg-slate-50 text-slate-800 antialiased overflow-hidden">
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
