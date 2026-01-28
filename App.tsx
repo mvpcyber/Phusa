@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { MenuGrid } from './components/MenuGrid';
 import { ContentDetail } from './components/ContentDetail';
+import { HadithView } from './components/HadithView';
+import { QuranView } from './components/QuranView';
 import { PrayerTimes } from './components/PrayerTimes';
 import { Qiblat } from './components/Qiblat';
 import { VideoList } from './components/VideoList';
@@ -17,6 +19,9 @@ function App() {
   const renderContent = () => {
     switch (view) {
       case 'HADIS':
+        return <HadithView onBack={() => setView('HOME')} />;
+      case 'QURAN':
+        return <QuranView onBack={() => setView('HOME')} />;
       case 'KITAB':
       case 'SAMAIL':
       case 'QUOTE':
@@ -114,7 +119,7 @@ function App() {
                  
                  {/* Left Items */}
                  <div className="flex gap-8">
-                     <button onClick={() => setView('HADIS')} className={`flex flex-col items-center gap-1 transition-all ${view === 'HADIS' ? 'text-amber-300 scale-110' : 'text-white/70 hover:text-white'}`}>
+                     <button onClick={() => setView('QURAN')} className={`flex flex-col items-center gap-1 transition-all ${view === 'QURAN' ? 'text-amber-300 scale-110' : 'text-white/70 hover:text-white'}`}>
                          <BookOpen size={22} strokeWidth={2} className="drop-shadow-sm" />
                          <span className="text-[10px] font-bold uppercase tracking-tight">Al-Quran</span>
                      </button>
