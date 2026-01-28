@@ -7,6 +7,7 @@ import { PrayerTimes } from './components/PrayerTimes';
 import { Qiblat } from './components/Qiblat';
 import { VideoList } from './components/VideoList';
 import { Wallpaper } from './components/Wallpaper';
+import { InstallPrompt } from './components/InstallPrompt';
 import { ViewState } from './types';
 import { Menu, BookOpen, FileText, Home, Clock, User } from 'lucide-react';
 
@@ -113,6 +114,9 @@ function App() {
       <div className="relative z-10 w-full h-full max-w-md mx-auto flex flex-col shadow-2xl">
          {renderContent()}
          
+         {/* Install Prompt (PWA) - Only shows on mobile/tablet */}
+         <InstallPrompt />
+
          {/* Bottom Navigation Bar - Liquid Glass Floating */}
          <div className="absolute bottom-6 w-full z-50 px-4">
              <div className="liquid-glass rounded-2xl h-20 px-6 flex justify-between items-center relative shadow-2xl backdrop-blur-xl">
