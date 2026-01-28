@@ -37,7 +37,7 @@ const MENU_ITEMS = [
   },
   { 
     id: 'SAMAIL', 
-    title: 'Samail Nabi', 
+    title: 'Syamail Nabi', 
     icon: User, 
     // Violet / Purple Theme
     bgClass: 'bg-violet-400/20 border-violet-400/30 hover:bg-violet-400/30',

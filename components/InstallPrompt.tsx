@@ -68,9 +68,8 @@ export const InstallPrompt: React.FC = () => {
                 </button>
 
                 <div className="flex items-start gap-4 pr-6">
-                    <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center border border-white/20 shrink-0">
-                        {/* Logo Placeholder */}
-                        <span className="text-2xl font-bold text-amber-300">P</span>
+                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center border border-white/20 shrink-0 overflow-hidden">
+                        <img src="https://pusha.muijakarta.or.id/img/logo.png" alt="PUSHA Logo" className="w-full h-full object-contain p-1" />
                     </div>
                     
                     <div className="flex-1">

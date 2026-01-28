@@ -30,7 +30,7 @@ export const ContentDetail: React.FC<ContentDetailProps> = ({ type, onBack }) =>
     switch (type) {
       case 'HADIS': return 'Hadis Harian';
       case 'KITAB': return 'Rekomendasi Kitab';
-      case 'SAMAIL': return 'Samail Nabi';
+      case 'SAMAIL': return 'Syamail Nabi';
       case 'QUOTE': return 'Quote Nabawi';
       default: return 'Detail';
     }
