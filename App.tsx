@@ -8,21 +8,63 @@ import { Qiblat } from './components/Qiblat';
 import { VideoList } from './components/VideoList';
 import { Wallpaper } from './components/Wallpaper';
 import { InstallPrompt } from './components/InstallPrompt';
-import { getPrayerTimesAI } from './services/gemini';
+import { getKemenagPrayerTimes, getNextPrayer, KemenagJadwal } from './services/prayer';
 import { ViewState } from './types';
-import { Menu, BookOpen, FileText, Home, Clock, User, MapPin } from 'lucide-react';
+import { 
+  Menu, 
+  BookOpen, 
+  FileText, 
+  Home, 
+  MapPin, 
+  MessageCircleQuestion, 
+  MessageCircle,
+  Instagram, 
+  X, 
+  ExternalLink,
+  Send
+} from 'lucide-react';
 
 const HEADER_IMAGE = "https://pusha.muijakarta.or.id/img/header2.jpg";
 const APP_BG = "https://pusha.muijakarta.or.id/img/bg2.png";
 
 function App() {
   const [view, setView] = useState<ViewState>('HOME');
-  const [prayerTimes, setPrayerTimes] = useState<any>(null);
+  const [prayerData, setPrayerData] = useState<KemenagJadwal | null>(null);
+  const [locationName, setLocationName] = useState("Jakarta");
+  const [nextPrayerKey, setNextPrayerKey] = useState<string>('');
+  
+  // State untuk Modal Sosmed & WhatsApp
+  const [showSosmedModal, setShowSosmedModal] = useState(false);
+  const [showWaModal, setShowWaModal] = useState(false);
 
   useEffect(() => {
-    // Load jadwal sholat untuk widget home (default Jakarta agar cepat)
-    getPrayerTimesAI("Jakarta").then(data => setPrayerTimes(data));
+    // Menggunakan API Kemenag
+    getKemenagPrayerTimes("Jakarta").then(res => {
+        if (res) {
+            setPrayerData(res.data);
+            setLocationName(res.location);
+            setNextPrayerKey(getNextPrayer(res.data));
+        }
+    });
   }, []);
+
+  // Handler untuk menampilkan Modal WA
+  const handleWhatsAppClick = () => {
+    setShowWaModal(true);
+  };
+
+  // Handler untuk eksekusi redirect ke WA
+  const proceedToWhatsApp = () => {
+    const phone = "6281313132204";
+    const message = encodeURIComponent("Assalammualaikum Ustad Saya member Aplikasi PHUSA, Saya Mau Tanya");
+    window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+    setShowWaModal(false);
+  };
+
+  const handleInstagram = () => {
+    window.open("https://www.instagram.com/pusatstudihadis/", '_blank');
+    setShowSosmedModal(false);
+  };
 
   const renderContent = () => {
     switch (view) {
@@ -73,28 +115,40 @@ function App() {
               
               {/* Prayer Times Widget */}
               <div className="mt-2 mb-6">
-                  {!prayerTimes ? (
+                  {!prayerData ? (
                       <div className="flex justify-center gap-2 animate-pulse">
                           {[1,2,3,4,5].map(i => <div key={i} className="w-14 h-14 bg-white/50 rounded-xl"></div>)}
                       </div>
                   ) : (
-                     <div className="flex justify-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                     <div className="flex justify-center gap-2 overflow-x-auto pb-2 scrollbar-hide px-1">
                         {[
-                          { key: 'fajr', label: 'Subuh' },
-                          { key: 'dhuhr', label: 'Dzuhur' },
-                          { key: 'asr', label: 'Ashar' },
+                          { key: 'subuh', label: 'Subuh' },
+                          { key: 'dzuhur', label: 'Dzuhur' },
+                          { key: 'ashar', label: 'Ashar' },
                           { key: 'maghrib', label: 'Maghrib' },
-                          { key: 'isha', label: 'Isya' }
-                        ].map((item) => (
-                           <div key={item.key} className="flex flex-col items-center bg-white/10 backdrop-blur-md rounded-xl p-2 min-w-[62px] border border-white/20 shadow-lg">
-                              <span className="text-[10px] uppercase text-white/80 font-bold tracking-wider mb-1">{item.label}</span>
-                              <span className="text-sm font-bold text-white font-mono">{prayerTimes[item.key]}</span>
-                           </div>
-                        ))}
+                          { key: 'isya', label: 'Isya' }
+                        ].map((item) => {
+                           // Logic highlight jika key sama dengan nextPrayerKey
+                           const isActive = nextPrayerKey === item.key;
+                           return (
+                             <div 
+                                key={item.key} 
+                                className={`flex flex-col items-center rounded-xl p-2 min-w-[62px] border shadow-lg transition-all duration-300
+                                  ${isActive 
+                                    ? 'bg-amber-400 text-primary border-amber-300 scale-110 z-10 ring-2 ring-white/30' 
+                                    : 'bg-white/10 backdrop-blur-md text-white border-white/20'}
+                                `}
+                             >
+                                <span className={`text-[10px] uppercase font-bold tracking-wider mb-1 ${isActive ? 'text-primary' : 'text-white/80'}`}>{item.label}</span>
+                                {/* @ts-ignore */}
+                                <span className="text-sm font-bold font-mono">{prayerData[item.key]}</span>
+                             </div>
+                           )
+                        })}
                      </div>
                   )}
                    <div className="text-[10px] text-white/90 mt-3 flex items-center justify-center gap-1 drop-shadow-sm font-medium">
-                      <MapPin size={10} /> Jakarta, Indonesia
+                      <MapPin size={10} /> {locationName}
                    </div>
                </div>
 
@@ -155,6 +209,66 @@ function App() {
          {/* Install Prompt (PWA) */}
          <InstallPrompt />
 
+         {/* Modal Sosmed */}
+         {showSosmedModal && (
+            <div className="absolute inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-fade-in">
+                <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl relative border border-slate-100 transform transition-all scale-100">
+                    <button 
+                        onClick={() => setShowSosmedModal(false)} 
+                        className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 bg-slate-50 rounded-full"
+                    >
+                        <X size={20} />
+                    </button>
+                    
+                    <div className="flex flex-col items-center text-center mt-2">
+                        <div className="w-16 h-16 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg mb-4 text-white">
+                            <Instagram size={36} />
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-800">Media Sosial</h3>
+                        <p className="text-sm text-slate-500 mt-2 mb-6 px-2">
+                            Kunjungi Instagram resmi <strong>Pusat Studi Hadis</strong> untuk update kajian dan informasi terbaru.
+                        </p>
+                        <button 
+                            onClick={handleInstagram}
+                            className="w-full py-3 bg-primary text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+                        >
+                            Buka Instagram <ExternalLink size={16} />
+                        </button>
+                    </div>
+                </div>
+            </div>
+         )}
+
+         {/* Modal Tanya (WhatsApp) */}
+         {showWaModal && (
+            <div className="absolute inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-fade-in">
+                <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl relative border border-slate-100 transform transition-all scale-100">
+                    <button 
+                        onClick={() => setShowWaModal(false)} 
+                        className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 bg-slate-50 rounded-full"
+                    >
+                        <X size={20} />
+                    </button>
+                    
+                    <div className="flex flex-col items-center text-center mt-2">
+                        <div className="w-16 h-16 bg-gradient-to-tr from-emerald-400 via-green-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg mb-4 text-white">
+                            <MessageCircle size={36} />
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-800">Tanya Ustadz</h3>
+                        <p className="text-sm text-slate-500 mt-2 mb-6 px-2">
+                            Anda akan diarahkan ke WhatsApp untuk berkonsultasi langsung dengan Ustadz.
+                        </p>
+                        <button 
+                            onClick={proceedToWhatsApp}
+                            className="w-full py-3 bg-emerald-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/20"
+                        >
+                            Lanjut ke WhatsApp <Send size={16} />
+                        </button>
+                    </div>
+                </div>
+            </div>
+         )}
+
          {/* Bottom Navigation Bar - Light Floating */}
          <div className="absolute bottom-6 w-full z-50 px-4">
              <div className="bg-white rounded-2xl h-20 px-6 flex justify-between items-center relative shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-slate-100">
@@ -184,13 +298,16 @@ function App() {
 
                  {/* Right Items */}
                  <div className="flex gap-8">
-                     <button onClick={() => setView('PRAYER')} className={`flex flex-col items-center gap-1 transition-all ${view === 'PRAYER' ? 'text-primary scale-110' : 'text-slate-400 hover:text-slate-600'}`}>
-                         <Clock size={22} strokeWidth={2} />
-                         <span className="text-[10px] font-bold uppercase tracking-tight">Jadwal</span>
+                     {/* Menu Tanya (WhatsApp Modal) */}
+                     <button onClick={handleWhatsAppClick} className="flex flex-col items-center gap-1 text-slate-400 hover:text-green-600 transition-all">
+                         <MessageCircleQuestion size={22} strokeWidth={2} />
+                         <span className="text-[10px] font-bold uppercase tracking-tight">Tanya?</span>
                      </button>
-                     <button onClick={() => alert('Fitur Profil Segera Hadir')} className="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 transition-all">
-                         <User size={22} strokeWidth={2} />
-                         <span className="text-[10px] font-bold uppercase tracking-tight">Profil</span>
+                     
+                     {/* Menu Sosmed (Instagram Modal) */}
+                     <button onClick={() => setShowSosmedModal(true)} className="flex flex-col items-center gap-1 text-slate-400 hover:text-pink-600 transition-all">
+                         <Instagram size={22} strokeWidth={2} />
+                         <span className="text-[10px] font-bold uppercase tracking-tight">Sosmed</span>
                      </button>
                  </div>
 
