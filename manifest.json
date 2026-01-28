@@ -3,9 +3,9 @@
   "name": "PUSHA - Pusat Studi Hadis",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "https://pusha.muijakarta.or.id/img/logo.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/png"
     },
     {
       "src": "https://pusha.muijakarta.or.id/img/logo.png",

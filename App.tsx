@@ -21,7 +21,9 @@ import {
   Instagram, 
   X, 
   ExternalLink,
-  Send
+  Send,
+  Copy,
+  Check
 } from 'lucide-react';
 
 const HEADER_IMAGE = "https://pusha.muijakarta.or.id/img/header2.jpg";
@@ -51,6 +53,7 @@ function App() {
   
   // State untuk Quote Random
   const [quote, setQuote] = useState(RANDOM_QUOTES[0]);
+  const [copiedQuote, setCopiedQuote] = useState(false);
 
   // State untuk Modal Sosmed & WhatsApp
   const [showSosmedModal, setShowSosmedModal] = useState(false);
@@ -87,6 +90,14 @@ function App() {
   const handleInstagram = () => {
     window.open("https://www.instagram.com/pusatstudihadis/", '_blank');
     setShowSosmedModal(false);
+  };
+
+  const handleCopyQuote = () => {
+    const textToCopy = `"${quote.text}"\n\n- ${quote.source}\n\nVia Aplikasi PUSHA`;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        setCopiedQuote(true);
+        setTimeout(() => setCopiedQuote(false), 2000);
+    }).catch(err => console.error("Gagal menyalin", err));
   };
 
   const renderContent = () => {
@@ -175,10 +186,49 @@ function App() {
                    </div>
                </div>
 
-              {/* Random Quote Section */}
-              <div className="bg-white rounded-xl p-4 inline-block mt-1 shadow-md border border-slate-100 max-w-xs transition-all duration-500">
-                 <p className="text-xs text-slate-600 italic">"{quote.text}"</p>
-                 <p className="text-[10px] text-primary mt-2 font-bold">- {quote.source}</p>
+              {/* Random Quote Section (Interactive, No Button, Islamic Background) */}
+              <div 
+                 onClick={handleCopyQuote}
+                 className="relative mt-1 w-full max-w-sm mx-auto cursor-pointer group select-none tap-highlight-transparent"
+              >
+                 <div className="bg-white rounded-2xl p-6 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] border border-slate-100 transition-all duration-300 relative overflow-hidden active:scale-[0.98] hover:shadow-lg">
+                     
+                     {/* Islamic Ornament Backgrounds */}
+                     <div className="absolute top-0 right-0 w-32 h-32 opacity-[0.04] pointer-events-none transform translate-x-10 -translate-y-10">
+                         <svg viewBox="0 0 200 200" fill="currentColor" className="w-full h-full text-primary">
+                            <path d="M100 0 L125 75 L200 100 L125 125 L100 200 L75 125 L0 100 L75 75 Z" />
+                         </svg>
+                     </div>
+                     <div className="absolute bottom-0 left-0 w-28 h-28 opacity-[0.04] pointer-events-none transform -translate-x-8 translate-y-8 rotate-45">
+                        <svg viewBox="0 0 200 200" fill="currentColor" className="w-full h-full text-primary">
+                            <rect x="50" y="50" width="100" height="100" stroke="currentColor" strokeWidth="10" fill="none" transform="rotate(45 100 100)" />
+                            <rect x="50" y="50" width="100" height="100" stroke="currentColor" strokeWidth="10" fill="none" />
+                         </svg>
+                     </div>
+                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+
+                     <p className="text-base sm:text-lg text-slate-700 italic leading-relaxed font-medium font-serif relative z-10">
+                        "{quote.text}"
+                     </p>
+                     
+                     <div className="w-12 h-1 bg-primary/20 mx-auto my-4 rounded-full relative z-10"></div>
+                     
+                     <div className="flex justify-center items-center gap-2 relative z-10">
+                        <p className="text-xs text-primary font-bold uppercase tracking-widest">
+                            - {quote.source}
+                        </p>
+                     </div>
+
+                     <p className="text-[9px] text-slate-300 mt-3 text-center opacity-60">Ketuk untuk menyalin</p>
+
+                     {/* Notification Badge Overlay */}
+                     {copiedQuote && (
+                        <div className="absolute inset-0 bg-primary/90 backdrop-blur-sm flex flex-col items-center justify-center z-30 animate-fade-in rounded-2xl">
+                            <Check size={32} className="text-white mb-2" />
+                            <span className="text-white font-bold text-sm">Teks Tersalin!</span>
+                        </div>
+                     )}
+                 </div>
               </div>
             </div>
 
