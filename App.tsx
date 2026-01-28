@@ -27,18 +27,41 @@ import {
 const HEADER_IMAGE = "https://pusha.muijakarta.or.id/img/header2.jpg";
 const APP_BG = "https://pusha.muijakarta.or.id/img/bg2.png";
 
+// Kumpulan Quote Hadis untuk Randomizer
+const RANDOM_QUOTES = [
+  { text: "Barangsiapa yang menempuh jalan untuk menuntut ilmu, Allah akan mudahkan baginya jalan menuju surga.", source: "HR. Muslim" },
+  { text: "Sebaik-baik kalian adalah orang yang belajar Al-Qur'an dan mengajarkannya.", source: "HR. Bukhari" },
+  { text: "Senyummu di hadapan saudaramu adalah sedekah.", source: "HR. Tirmidzi" },
+  { text: "Sesungguhnya amal itu tergantung niatnya.", source: "HR. Bukhari & Muslim" },
+  { text: "Janganlah engkau marah, maka bagimu surga.", source: "HR. Thabrani" },
+  { text: "Barangsiapa yang beriman kepada Allah dan hari akhir, hendaklah ia berkata baik atau diam.", source: "HR. Bukhari & Muslim" },
+  { text: "Tidaklah berkurang harta karena sedekah.", source: "HR. Muslim" },
+  { text: "Orang yang kuat bukanlah orang yang jago gulat, tetapi orang yang mampu menahan diri ketika marah.", source: "HR. Bukhari & Muslim" },
+  { text: "Amal yang paling dicintai Allah adalah yang terus-menerus (istiqomah) meskipun sedikit.", source: "HR. Bukhari & Muslim" },
+  { text: "Bertaqwalah kepada Allah di mana saja engkau berada.", source: "HR. Tirmidzi" },
+  { text: "Malu itu tidak mendatangkan sesuatu melainkan kebaikan semata-mata.", source: "HR. Bukhari & Muslim" },
+  { text: "Dunia ini adalah perhiasan, dan sebaik-baik perhiasan dunia adalah wanita shalihah.", source: "HR. Muslim" }
+];
+
 function App() {
   const [view, setView] = useState<ViewState>('HOME');
   const [prayerData, setPrayerData] = useState<KemenagJadwal | null>(null);
   const [locationName, setLocationName] = useState("Jakarta");
   const [nextPrayerKey, setNextPrayerKey] = useState<string>('');
   
+  // State untuk Quote Random
+  const [quote, setQuote] = useState(RANDOM_QUOTES[0]);
+
   // State untuk Modal Sosmed & WhatsApp
   const [showSosmedModal, setShowSosmedModal] = useState(false);
   const [showWaModal, setShowWaModal] = useState(false);
 
   useEffect(() => {
-    // Menggunakan API Kemenag
+    // 1. Randomize Quote saat Load
+    const randomIndex = Math.floor(Math.random() * RANDOM_QUOTES.length);
+    setQuote(RANDOM_QUOTES[randomIndex]);
+
+    // 2. Menggunakan API Kemenag
     getKemenagPrayerTimes("Jakarta").then(res => {
         if (res) {
             setPrayerData(res.data);
@@ -55,8 +78,8 @@ function App() {
 
   // Handler untuk eksekusi redirect ke WA
   const proceedToWhatsApp = () => {
-    const phone = "6281313132204";
-    const message = encodeURIComponent("Assalammualaikum Ustad Saya member Aplikasi PHUSA, Saya Mau Tanya");
+    const phone = "6281280055241";
+    const message = encodeURIComponent("Assalammualaikum PUSHA saya member dari aplikasi PUSHA , ada yang ingin saya tayakan.?");
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
     setShowWaModal(false);
   };
@@ -152,9 +175,10 @@ function App() {
                    </div>
                </div>
 
-              <div className="bg-white rounded-xl p-4 inline-block mt-1 shadow-md border border-slate-100 max-w-xs">
-                 <p className="text-xs text-slate-600 italic">"Barangsiapa yang menempuh jalan untuk menuntut ilmu, Allah akan mudahkan baginya jalan menuju surga."</p>
-                 <p className="text-[10px] text-primary mt-2 font-bold">- HR. Muslim</p>
+              {/* Random Quote Section */}
+              <div className="bg-white rounded-xl p-4 inline-block mt-1 shadow-md border border-slate-100 max-w-xs transition-all duration-500">
+                 <p className="text-xs text-slate-600 italic">"{quote.text}"</p>
+                 <p className="text-[10px] text-primary mt-2 font-bold">- {quote.source}</p>
               </div>
             </div>
 
