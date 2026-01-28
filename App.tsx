@@ -128,7 +128,8 @@ function App() {
             </div>
 
             {/* Header / Top Nav */}
-            <header className="p-4 pt-12 flex justify-between items-center text-white z-10 relative">
+            {/* UPDATED: pt-8 instead of pt-12 to move logo up */}
+            <header className="px-4 pt-8 pb-4 flex justify-between items-center text-white z-10 relative">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden border-2 border-white/20">
                    <img src="https://pusha.muijakarta.or.id/img/logo.png" alt="PUSHA Logo" className="w-full h-full object-contain p-1" />
@@ -148,13 +149,13 @@ function App() {
               <p className="text-sm font-bold text-white mb-2 uppercase tracking-widest text-shadow opacity-90">Assalamu'alaikum</p>
               
               {/* Prayer Times Widget */}
-              <div className="mt-2 mb-6">
+              <div className="mt-2 mb-6 h-24 flex items-center justify-center">
                   {!prayerData ? (
                       <div className="flex justify-center gap-2 animate-pulse">
                           {[1,2,3,4,5].map(i => <div key={i} className="w-14 h-14 bg-white/50 rounded-xl"></div>)}
                       </div>
                   ) : (
-                     <div className="flex justify-center gap-2 overflow-x-auto pb-2 scrollbar-hide px-1">
+                     <div className="flex justify-center items-center gap-2 overflow-visible px-1">
                         {[
                           { key: 'subuh', label: 'Subuh' },
                           { key: 'dzuhur', label: 'Dzuhur' },
@@ -167,10 +168,10 @@ function App() {
                            return (
                              <div 
                                 key={item.key} 
-                                className={`flex flex-col items-center rounded-xl p-2 min-w-[62px] border shadow-lg transition-all duration-300
+                                className={`flex flex-col items-center justify-center rounded-xl min-w-[62px] border transition-all duration-300 relative
                                   ${isActive 
-                                    ? 'bg-amber-400 text-primary border-amber-300 scale-110 z-10 ring-2 ring-white/30' 
-                                    : 'bg-white/10 backdrop-blur-md text-white border-white/20'}
+                                    ? 'bg-amber-400 text-primary border-amber-300 scale-125 z-20 shadow-[0_8px_25px_-5px_rgba(251,191,36,0.6)] py-4' 
+                                    : 'bg-white/10 backdrop-blur-md text-white border-white/20 p-2 shadow-lg'}
                                 `}
                              >
                                 <span className={`text-[10px] uppercase font-bold tracking-wider mb-1 ${isActive ? 'text-primary' : 'text-white/80'}`}>{item.label}</span>
@@ -181,15 +182,16 @@ function App() {
                         })}
                      </div>
                   )}
-                   <div className="text-[10px] text-white/90 mt-3 flex items-center justify-center gap-1 drop-shadow-sm font-medium">
-                      <MapPin size={10} /> {locationName}
-                   </div>
-               </div>
+              </div>
+              
+              <div className="text-[10px] text-white/90 flex items-center justify-center gap-1 drop-shadow-sm font-medium">
+                <MapPin size={10} /> {locationName}
+              </div>
 
               {/* Random Quote Section (Interactive, No Button, Islamic Background) */}
               <div 
                  onClick={handleCopyQuote}
-                 className="relative mt-1 w-full max-w-sm mx-auto cursor-pointer group select-none tap-highlight-transparent"
+                 className="relative mt-4 w-full max-w-sm mx-auto cursor-pointer group select-none tap-highlight-transparent"
               >
                  <div className="bg-white rounded-2xl p-6 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] border border-slate-100 transition-all duration-300 relative overflow-hidden active:scale-[0.98] hover:shadow-lg">
                      
@@ -344,7 +346,8 @@ function App() {
          )}
 
          {/* Bottom Navigation Bar - Light Floating */}
-         <div className="absolute bottom-6 w-full z-50 px-4">
+         {/* UPDATED: bottom-2 instead of bottom-6 to make it closer to bottom */}
+         <div className="absolute bottom-2 w-full z-50 px-4">
              <div className="bg-white rounded-2xl h-20 px-6 flex justify-between items-center relative shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-slate-100">
                  
                  {/* Left Items */}
