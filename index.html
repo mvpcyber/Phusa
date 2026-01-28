@@ -3,13 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-    <meta name="theme-color" content="#2f486d"/>
+    <meta name="theme-color" content="#ffffff"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="https://pusha.muijakarta.or.id/img/logo.png">
     
     <title>PUSHA - Pusat Studi Hadis</title>
-    <!-- Menggunakan CDN Tailwind untuk kesederhanaan build tanpa konfigurasi PostCSS yang rumit -->
+    <!-- Menggunakan CDN Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
@@ -20,9 +21,9 @@
               sans: ['"Plus Jakarta Sans"', 'sans-serif'],
             },
             colors: {
-              primary: '#2f486d', // Yale Blue / Dark Slate
-              secondary: '#f3eae0', // Cream / Bone
-              accent: '#D4AF37', // Gold (Tetap sebagai aksen pelengkap)
+              primary: '#2f486d', // Yale Blue (Warna Branding Utama)
+              secondary: '#f3eae0', // Cream
+              accent: '#D4AF37', // Gold
             }
           }
         }
@@ -31,33 +32,37 @@
     <style>
       body {
         -webkit-tap-highlight-color: transparent;
+        background-color: #f8fafc;
       }
-      /* Liquid Glass Theme */
+      
+      /* Light Theme Card Style (Previously Liquid Glass) */
       .liquid-glass {
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        background: #ffffff;
+        border: 1px solid #e2e8f0; /* Slate 200 */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
       }
       
       .liquid-glass-dark {
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
       }
 
       .glass-btn {
-        background: rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.9);
         border: 1px solid rgba(255, 255, 255, 0.5);
         backdrop-filter: blur(4px);
         transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       }
       .glass-btn:active {
-        background: rgba(255, 255, 255, 0.4);
+        background: rgba(241, 245, 249, 1);
         transform: scale(0.95);
+      }
+      
+      /* Helper untuk text contrast di header image */
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
       }
 
       /* Custom Scrollbar for hidden feel */
@@ -80,7 +85,7 @@
 }
 </script>
 </head>
-  <body class="bg-primary text-slate-800 antialiased overflow-hidden">
+  <body class="bg-slate-50 text-slate-800 antialiased overflow-hidden">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

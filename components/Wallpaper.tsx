@@ -10,7 +10,7 @@ const WALLPAPERS = [
   'https://picsum.photos/400/800?random=15',
 ];
 
-const HEADER_BG = "https://m.muijakarta.or.id/img/header.jpg";
+const HEADER_BG = "https://pusha.muijakarta.or.id/img/header2.jpg";
 
 export const Wallpaper: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   return (

@@ -6,7 +6,7 @@ interface PrayerTimesProps {
   onBack: () => void;
 }
 
-const HEADER_BG = "https://m.muijakarta.or.id/img/header.jpg";
+const HEADER_BG = "https://pusha.muijakarta.or.id/img/header2.jpg";
 
 export const PrayerTimes: React.FC<PrayerTimesProps> = ({ onBack }) => {
   const [times, setTimes] = useState<any>(null);
@@ -29,12 +29,12 @@ export const PrayerTimes: React.FC<PrayerTimesProps> = ({ onBack }) => {
   return (
     <div className="flex flex-col h-full relative">
       {/* Header Glass with Image */}
-      <div className="relative m-4 mb-2 rounded-[30px] shadow-lg overflow-hidden border border-white/30 shrink-0">
+      <div className="relative m-4 mb-2 rounded-[30px] shadow-lg overflow-hidden border border-white/20 shrink-0">
         <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(${HEADER_BG})` }} />
-        <div className="absolute inset-0 bg-black/40 z-0 backdrop-blur-[2px]"></div>
+        <div className="absolute inset-0 bg-primary/40 z-0 backdrop-blur-[1px]"></div>
         
         <div className="relative z-10 p-6 pt-10 pb-10 text-white">
-          <button onClick={onBack} className="mb-4 hover:bg-white/20 p-2 rounded-full w-fit transition-colors glass-btn">
+          <button onClick={onBack} className="mb-4 bg-white/20 hover:bg-white/30 p-2 rounded-full w-fit transition-colors backdrop-blur-sm">
             <ArrowLeft className="w-6 h-6" />
           </button>
           
@@ -48,14 +48,14 @@ export const PrayerTimes: React.FC<PrayerTimesProps> = ({ onBack }) => {
       </div>
 
       <div className="flex-1 px-4 pb-32 overflow-y-auto">
-        <div className="liquid-glass rounded-3xl p-6 space-y-4 border border-white/30 mt-2">
+        <div className="liquid-glass rounded-3xl p-6 space-y-4 mt-2">
             {!times ? (
-                <div className="text-center py-10 text-white/70">Memuat Jadwal...</div>
+                <div className="text-center py-10 text-slate-500">Memuat Jadwal...</div>
             ) : (
                 Object.entries(times).map(([key, value]) => (
-                    <div key={key} className="flex items-center justify-between border-b border-white/10 pb-4 last:border-0 last:pb-0 hover:bg-white/5 px-2 rounded-lg transition-colors">
-                        <span className="capitalize font-semibold text-white text-lg drop-shadow-sm">{key}</span>
-                        <div className="bg-white/20 text-amber-300 px-4 py-1.5 rounded-lg font-bold font-mono border border-white/10 shadow-inner">
+                    <div key={key} className="flex items-center justify-between border-b border-slate-100 pb-4 last:border-0 last:pb-0 hover:bg-slate-50 px-2 rounded-lg transition-colors">
+                        <span className="capitalize font-semibold text-slate-700 text-lg">{key}</span>
+                        <div className="bg-slate-100 text-primary px-4 py-1.5 rounded-lg font-bold font-mono border border-slate-200">
                             {value as string}
                         </div>
                     </div>
@@ -63,7 +63,7 @@ export const PrayerTimes: React.FC<PrayerTimesProps> = ({ onBack }) => {
             )}
         </div>
         
-        <div className="mt-6 text-center text-xs text-white/60 bg-black/20 p-2 rounded-xl backdrop-blur-sm">
+        <div className="mt-6 text-center text-xs text-slate-500 bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
             Jadwal waktu sholat bersifat estimasi. Silakan tambahkan ihtiyat ± 2 menit.
         </div>
       </div>

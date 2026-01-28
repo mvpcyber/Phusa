@@ -59,31 +59,31 @@ export const InstallPrompt: React.FC = () => {
     <div className="fixed inset-0 z-[100] flex items-end justify-center pointer-events-none pb-24 px-4">
         {/* Container */}
         <div className="w-full max-w-md pointer-events-auto animate-bounce-in">
-            <div className="liquid-glass-dark rounded-2xl p-4 border border-white/20 shadow-2xl relative overflow-hidden">
+            <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xl relative overflow-hidden">
                 <button 
                     onClick={() => setShowPrompt(false)} 
-                    className="absolute top-2 right-2 text-white/50 hover:text-white"
+                    className="absolute top-2 right-2 text-slate-400 hover:text-slate-600"
                 >
                     <X size={18} />
                 </button>
 
                 <div className="flex items-start gap-4 pr-6">
-                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center border border-white/20 shrink-0 overflow-hidden">
+                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center border border-slate-100 shrink-0 overflow-hidden shadow-sm">
                         <img src="https://pusha.muijakarta.or.id/img/logo.png" alt="PUSHA Logo" className="w-full h-full object-contain p-1" />
                     </div>
                     
                     <div className="flex-1">
-                        <h3 className="text-white font-bold text-sm">Install Aplikasi PUSHA</h3>
-                        <p className="text-white/70 text-xs mt-1 leading-relaxed">
+                        <h3 className="text-slate-800 font-bold text-sm">Install Aplikasi PUSHA</h3>
+                        <p className="text-slate-500 text-xs mt-1 leading-relaxed">
                             {isIOS 
                                 ? "Untuk pengalaman terbaik, tambahkan ke Layar Utama." 
                                 : "Akses Hadis, Quran, dan Jadwal Sholat lebih cepat tanpa buka browser."}
                         </p>
 
                         {isIOS ? (
-                            <div className="mt-3 bg-white/10 rounded-lg p-2 text-xs text-white/90 border border-white/10">
+                            <div className="mt-3 bg-slate-50 rounded-lg p-2 text-xs text-slate-600 border border-slate-100">
                                 <div className="flex items-center gap-2 mb-1">
-                                    1. Tekan tombol Share <Share size={14} className="text-blue-400" />
+                                    1. Tekan tombol Share <Share size={14} className="text-blue-500" />
                                 </div>
                                 <div className="flex items-center gap-2">
                                     2. Pilih "Add to Home Screen" <PlusSquare size={14} />
@@ -92,7 +92,7 @@ export const InstallPrompt: React.FC = () => {
                         ) : (
                             <button 
                                 onClick={handleInstallClick}
-                                className="mt-3 w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/30"
+                                className="mt-3 w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2 shadow-lg shadow-primary/30"
                             >
                                 <Download size={14} />
                                 Install Sekarang
