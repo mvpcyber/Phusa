@@ -9,6 +9,11 @@
     },
     {
       "src": "https://pusha.muijakarta.or.id/img/logo.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "https://pusha.muijakarta.or.id/img/logo.png",
       "type": "image/png",
       "sizes": "192x192"
     },
@@ -18,8 +23,9 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "theme_color": "#2f486d",
   "background_color": "#2f486d"
 }

@@ -11,19 +11,19 @@ import { InstallPrompt } from './components/InstallPrompt';
 import { getKemenagPrayerTimes, getNextPrayer, KemenagJadwal } from './services/prayer';
 import { ViewState } from './types';
 import { 
-  Menu, 
   BookOpen, 
   FileText, 
   Home, 
   MapPin, 
   MessageCircleQuestion, 
-  MessageCircle,
   Instagram, 
   X, 
   ExternalLink,
   Send,
-  Copy,
-  Check
+  MessageCircle,
+  Check,
+  Heart,
+  HandHeart
 } from 'lucide-react';
 
 const HEADER_IMAGE = "https://pusha.muijakarta.or.id/img/header2.jpg";
@@ -55,9 +55,10 @@ function App() {
   const [quote, setQuote] = useState(RANDOM_QUOTES[0]);
   const [copiedQuote, setCopiedQuote] = useState(false);
 
-  // State untuk Modal Sosmed & WhatsApp
+  // State untuk Modal Sosmed & WhatsApp & Donasi
   const [showSosmedModal, setShowSosmedModal] = useState(false);
   const [showWaModal, setShowWaModal] = useState(false);
+  const [showDonationModal, setShowDonationModal] = useState(false);
 
   useEffect(() => {
     // 1. Randomize Quote saat Load
@@ -79,12 +80,20 @@ function App() {
     setShowWaModal(true);
   };
 
-  // Handler untuk eksekusi redirect ke WA
+  // Handler untuk eksekusi redirect ke WA (Tanya)
   const proceedToWhatsApp = () => {
     const phone = "6281280055241";
     const message = encodeURIComponent("Assalammualaikum PUSHA saya member dari aplikasi PUSHA , ada yang ingin saya tayakan.?");
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
     setShowWaModal(false);
+  };
+
+  // Handler untuk eksekusi redirect ke WA (Donasi)
+  const proceedToDonation = () => {
+    const phone = "6281280055241";
+    const message = encodeURIComponent("Assalammualaikum, Saya ingin berdonasi untuk pengembangan dan kemajuan aplikasi PUSHA.");
+    window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+    setShowDonationModal(false);
   };
 
   const handleInstagram = () => {
@@ -122,37 +131,43 @@ function App() {
         return (
           <>
             {/* Custom Header with Image */}
-            <div className="absolute top-0 left-0 w-full h-64 z-0 rounded-b-[40px] overflow-hidden shadow-lg border-b border-white/20">
+            {/* Reduced Height to h-44 */}
+            <div className="absolute top-0 left-0 w-full h-44 z-0 rounded-b-[30px] overflow-hidden shadow-lg border-b border-white/20">
                 <img src={HEADER_IMAGE} alt="Header" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/40 to-primary/80"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/50 to-primary/80"></div>
             </div>
 
             {/* Header / Top Nav */}
-            {/* UPDATED: pt-8 instead of pt-12 to move logo up */}
-            <header className="px-4 pt-8 pb-4 flex justify-between items-center text-white z-10 relative">
-              <div className="flex items-center gap-3">
+            <header className="px-4 pt-4 pb-0 flex justify-between items-start text-white z-10 relative">
+              <div className="flex items-center gap-3 mt-1">
                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden border-2 border-white/20">
                    <img src="https://pusha.muijakarta.or.id/img/logo.png" alt="PUSHA Logo" className="w-full h-full object-contain p-1" />
                 </div>
                 <div>
                   <h1 className="font-bold text-lg leading-none drop-shadow-md text-white">PUSHA</h1>
-                  <p className="text-xs text-white/90 drop-shadow-sm font-medium">Pusat Studi Hadis</p>
+                  <p className="text-[10px] text-white/90 drop-shadow-sm font-medium">Pusat Studi Hadis</p>
                 </div>
               </div>
-              <button className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors backdrop-blur-sm">
-                <Menu className="w-6 h-6 text-white" />
-              </button>
+
+              {/* Right Side: Location Only (Menu Removed) */}
+              <div className="flex flex-col items-end gap-2">
+                 {/* Location moved here - Top Right */}
+                 <div className="flex items-center gap-1 bg-white/20 backdrop-blur-md px-2 py-1 rounded-full border border-white/10 shadow-sm">
+                    <MapPin size={10} className="text-amber-300" /> 
+                    <span className="text-[9px] font-bold uppercase tracking-wide text-white">{locationName}</span>
+                 </div>
+              </div>
             </header>
 
             {/* Hero Section / Greeting */}
-            <div className="px-6 py-4 text-center z-10 relative mb-2">
-              <p className="text-sm font-bold text-white mb-2 uppercase tracking-widest text-shadow opacity-90">Assalamu'alaikum</p>
+            <div className="px-6 pt-2 pb-0 text-center z-10 relative">
+              <p className="text-xs font-bold text-white mb-2 uppercase tracking-widest text-shadow opacity-90">Assalamu'alaikum</p>
               
-              {/* Prayer Times Widget */}
-              <div className="mt-2 mb-6 h-24 flex items-center justify-center">
+              {/* Prayer Times Widget - Compact */}
+              <div className="mt-1 mb-3 h-20 flex items-center justify-center">
                   {!prayerData ? (
                       <div className="flex justify-center gap-2 animate-pulse">
-                          {[1,2,3,4,5].map(i => <div key={i} className="w-14 h-14 bg-white/50 rounded-xl"></div>)}
+                          {[1,2,3,4,5].map(i => <div key={i} className="w-12 h-12 bg-white/50 rounded-xl"></div>)}
                       </div>
                   ) : (
                      <div className="flex justify-center items-center gap-2 overflow-visible px-1">
@@ -163,96 +178,86 @@ function App() {
                           { key: 'maghrib', label: 'Maghrib' },
                           { key: 'isya', label: 'Isya' }
                         ].map((item) => {
-                           // Logic highlight jika key sama dengan nextPrayerKey
                            const isActive = nextPrayerKey === item.key;
                            return (
                              <div 
                                 key={item.key} 
-                                className={`flex flex-col items-center justify-center rounded-xl min-w-[62px] border transition-all duration-300 relative
+                                className={`flex flex-col items-center justify-center rounded-xl min-w-[58px] border transition-all duration-300 relative
                                   ${isActive 
-                                    ? 'bg-amber-400 text-primary border-amber-300 scale-125 z-20 shadow-[0_8px_25px_-5px_rgba(251,191,36,0.6)] py-4' 
-                                    : 'bg-white/10 backdrop-blur-md text-white border-white/20 p-2 shadow-lg'}
+                                    ? 'bg-amber-400 text-primary border-amber-300 scale-125 z-20 shadow-[0_8px_25px_-5px_rgba(251,191,36,0.6)] py-3' 
+                                    : 'bg-white/10 backdrop-blur-md text-white border-white/20 p-1.5 shadow-lg'}
                                 `}
                              >
-                                <span className={`text-[10px] uppercase font-bold tracking-wider mb-1 ${isActive ? 'text-primary' : 'text-white/80'}`}>{item.label}</span>
+                                <span className={`text-[9px] uppercase font-bold tracking-wider mb-0.5 ${isActive ? 'text-primary' : 'text-white/80'}`}>{item.label}</span>
                                 {/* @ts-ignore */}
-                                <span className="text-sm font-bold font-mono">{prayerData[item.key]}</span>
+                                <span className="text-xs font-bold font-mono">{prayerData[item.key]}</span>
                              </div>
                            )
                         })}
                      </div>
                   )}
               </div>
-              
-              <div className="text-[10px] text-white/90 flex items-center justify-center gap-1 drop-shadow-sm font-medium">
-                <MapPin size={10} /> {locationName}
-              </div>
 
-              {/* Random Quote Section (Interactive, No Button, Islamic Background) */}
+              {/* Random Quote Section - Compact Version */}
               <div 
                  onClick={handleCopyQuote}
-                 className="relative mt-4 w-full max-w-sm mx-auto cursor-pointer group select-none tap-highlight-transparent"
+                 className="relative mt-2 w-full max-w-sm mx-auto cursor-pointer group select-none tap-highlight-transparent"
               >
-                 <div className="bg-white rounded-2xl p-6 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] border border-slate-100 transition-all duration-300 relative overflow-hidden active:scale-[0.98] hover:shadow-lg">
-                     
-                     {/* Islamic Ornament Backgrounds */}
-                     <div className="absolute top-0 right-0 w-32 h-32 opacity-[0.04] pointer-events-none transform translate-x-10 -translate-y-10">
-                         <svg viewBox="0 0 200 200" fill="currentColor" className="w-full h-full text-primary">
-                            <path d="M100 0 L125 75 L200 100 L125 125 L100 200 L75 125 L0 100 L75 75 Z" />
-                         </svg>
-                     </div>
-                     <div className="absolute bottom-0 left-0 w-28 h-28 opacity-[0.04] pointer-events-none transform -translate-x-8 translate-y-8 rotate-45">
-                        <svg viewBox="0 0 200 200" fill="currentColor" className="w-full h-full text-primary">
-                            <rect x="50" y="50" width="100" height="100" stroke="currentColor" strokeWidth="10" fill="none" transform="rotate(45 100 100)" />
-                            <rect x="50" y="50" width="100" height="100" stroke="currentColor" strokeWidth="10" fill="none" />
-                         </svg>
-                     </div>
-                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
-
-                     <p className="text-base sm:text-lg text-slate-700 italic leading-relaxed font-medium font-serif relative z-10">
+                 <div className="bg-white rounded-xl p-3 shadow-sm border border-slate-100 transition-all duration-300 relative overflow-hidden active:scale-[0.98]">
+                     <p className="text-xs sm:text-sm text-slate-700 italic leading-snug font-medium font-serif relative z-10 line-clamp-3">
                         "{quote.text}"
                      </p>
                      
-                     <div className="w-12 h-1 bg-primary/20 mx-auto my-4 rounded-full relative z-10"></div>
-                     
-                     <div className="flex justify-center items-center gap-2 relative z-10">
-                        <p className="text-xs text-primary font-bold uppercase tracking-widest">
-                            - {quote.source}
+                     <div className="flex justify-center items-center gap-2 relative z-10 mt-2">
+                        <div className="w-6 h-0.5 bg-primary/20 rounded-full"></div>
+                        <p className="text-[10px] text-primary font-bold uppercase tracking-widest">
+                            {quote.source}
                         </p>
+                        <div className="w-6 h-0.5 bg-primary/20 rounded-full"></div>
                      </div>
-
-                     <p className="text-[9px] text-slate-300 mt-3 text-center opacity-60">Ketuk untuk menyalin</p>
 
                      {/* Notification Badge Overlay */}
                      {copiedQuote && (
-                        <div className="absolute inset-0 bg-primary/90 backdrop-blur-sm flex flex-col items-center justify-center z-30 animate-fade-in rounded-2xl">
-                            <Check size={32} className="text-white mb-2" />
-                            <span className="text-white font-bold text-sm">Teks Tersalin!</span>
+                        <div className="absolute inset-0 bg-primary/90 backdrop-blur-sm flex flex-col items-center justify-center z-30 animate-fade-in rounded-xl">
+                            <Check size={20} className="text-white mb-1" />
+                            <span className="text-white font-bold text-xs">Teks Tersalin!</span>
                         </div>
                      )}
                  </div>
               </div>
             </div>
 
-            {/* Main Menu - White Card Container */}
-            <div className="flex-1 z-10 relative overflow-y-auto pb-32">
+            {/* Main Menu - Content */}
+            <div className="flex-1 z-10 relative overflow-y-auto pb-24 no-scrollbar">
                {/* Menu Grid */}
-               <div className="mx-4 bg-white rounded-3xl overflow-hidden p-2 shadow-sm border border-slate-100">
-                   <div className="mt-2">
-                        <MenuGrid onNavigate={setView} />
-                   </div>
+               <div className="mx-4 mt-2 bg-white rounded-2xl overflow-hidden p-2 shadow-sm border border-slate-100">
+                    <MenuGrid onNavigate={setView} />
                </div>
 
                {/* Banner / Info */}
-               <div className="m-4 mt-6 bg-white rounded-2xl p-4 flex items-center gap-4 border-l-4 border-l-primary shadow-sm">
-                  <div className="bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center text-primary font-bold">
+               <div className="mx-4 mt-4 bg-white rounded-2xl p-3 flex items-center gap-3 border-l-4 border-l-primary shadow-sm">
+                  <div className="bg-primary/10 w-10 h-10 rounded-full flex items-center justify-center text-primary font-bold text-xs">
                      Info
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-800 text-sm">Jadwal Kajian Rutin</h4>
-                    <p className="text-xs text-slate-500">Simak kajian terbaru setiap hari Ahad.</p>
+                    <h4 className="font-bold text-slate-800 text-xs">Jadwal Kajian Rutin</h4>
+                    <p className="text-[10px] text-slate-500 leading-tight">Simak kajian terbaru setiap hari Ahad.</p>
                   </div>
                </div>
+
+               {/* Banner Donasi */}
+               <button 
+                  onClick={() => setShowDonationModal(true)}
+                  className="mx-4 mt-2 mb-4 w-[calc(100%-2rem)] bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-3 flex items-center gap-3 shadow-md shadow-emerald-200 cursor-pointer active:scale-[0.98] transition-all text-left group"
+               >
+                  <div className="bg-white/20 w-10 h-10 rounded-full flex items-center justify-center text-white border border-white/20 group-hover:bg-white/30 transition-colors">
+                     <Heart size={20} fill="currentColor" className="text-white/90" />
+                  </div>
+                  <div className="text-white">
+                    <h4 className="font-bold text-xs">Donasi Pengembangan</h4>
+                    <p className="text-[10px] opacity-90 leading-tight">Dukung kami untuk kemajuan aplikasi ini.</p>
+                  </div>
+               </button>
             </div>
           </>
         );
@@ -345,46 +350,81 @@ function App() {
             </div>
          )}
 
-         {/* Bottom Navigation Bar - Light Floating */}
-         {/* UPDATED: bottom-2 instead of bottom-6 to make it closer to bottom */}
-         <div className="absolute bottom-2 w-full z-50 px-4">
-             <div className="bg-white rounded-2xl h-20 px-6 flex justify-between items-center relative shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-slate-100">
+         {/* Modal Donasi */}
+         {showDonationModal && (
+            <div className="absolute inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-fade-in">
+                <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl relative border border-slate-100 transform transition-all scale-100">
+                    <button 
+                        onClick={() => setShowDonationModal(false)} 
+                        className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 bg-slate-50 rounded-full"
+                    >
+                        <X size={20} />
+                    </button>
+                    
+                    <div className="flex flex-col items-center text-center mt-2">
+                        <div className="w-16 h-16 bg-gradient-to-tr from-emerald-400 via-teal-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg mb-4 text-white animate-pulse">
+                            <HandHeart size={36} />
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-800">Infaq & Donasi</h3>
+                        <p className="text-sm text-slate-600 mt-3 mb-6 px-1 font-medium leading-relaxed">
+                            "Assalammualaikum, Apakah Anda Ingin Berdonasi Untuk Kemajuan Aplikasi Ini?"
+                        </p>
+                        <div className="flex flex-col gap-3 w-full">
+                            <button 
+                                onClick={proceedToDonation}
+                                className="w-full py-3 bg-emerald-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/20"
+                            >
+                                Ya, Berdonasi <Heart size={16} fill="currentColor" />
+                            </button>
+                            <button 
+                                onClick={() => setShowDonationModal(false)}
+                                className="w-full py-3 bg-slate-100 text-slate-500 font-bold rounded-xl hover:bg-slate-200 transition-colors"
+                            >
+                                Nanti Saja
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         )}
+
+         {/* Bottom Navigation Bar - Fixed Bottom (Stuck to bottom edge) */}
+         <div className="fixed bottom-0 left-0 right-0 z-50 w-full max-w-md mx-auto">
+             <div className="bg-white rounded-t-3xl h-[72px] px-6 flex justify-between items-center relative shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.1)] border-t border-slate-100 pb-safe">
                  
                  {/* Left Items */}
                  <div className="flex gap-8">
-                     <button onClick={() => setView('QURAN')} className={`flex flex-col items-center gap-1 transition-all ${view === 'QURAN' ? 'text-primary scale-110' : 'text-slate-400 hover:text-slate-600'}`}>
-                         <BookOpen size={22} strokeWidth={2} />
-                         <span className="text-[10px] font-bold uppercase tracking-tight">Al-Quran</span>
+                     <button onClick={() => setView('QURAN')} className={`flex flex-col items-center gap-1 transition-all ${view === 'QURAN' ? 'text-primary' : 'text-slate-400 hover:text-slate-600'}`}>
+                         <BookOpen size={20} strokeWidth={2} />
+                         <span className="text-[9px] font-bold uppercase tracking-tight">Al-Quran</span>
                      </button>
-                     <button onClick={() => setView('KITAB')} className={`flex flex-col items-center gap-1 transition-all ${view === 'KITAB' ? 'text-primary scale-110' : 'text-slate-400 hover:text-slate-600'}`}>
-                         <FileText size={22} strokeWidth={2} />
-                         <span className="text-[10px] font-bold uppercase tracking-tight">Fatwa</span>
+                     <button onClick={() => setView('KITAB')} className={`flex flex-col items-center gap-1 transition-all ${view === 'KITAB' ? 'text-primary' : 'text-slate-400 hover:text-slate-600'}`}>
+                         <FileText size={20} strokeWidth={2} />
+                         <span className="text-[9px] font-bold uppercase tracking-tight">Fatwa</span>
                      </button>
                  </div>
 
                  {/* Center Floating Home Button */}
-                 <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+                 <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
                       <button 
                           onClick={() => setView('HOME')}
-                          className={`w-16 h-16 rounded-full flex items-center justify-center shadow-xl border-4 border-white transition-transform active:scale-95 ${view === 'HOME' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-400'}`}
+                          className={`w-14 h-14 rounded-full flex items-center justify-center shadow-xl border-4 border-white transition-transform active:scale-95 ${view === 'HOME' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-400'}`}
                       >
-                          <Home size={28} strokeWidth={2.5} fill={view === 'HOME' ? "currentColor" : "none"} />
+                          <Home size={24} strokeWidth={2.5} fill={view === 'HOME' ? "currentColor" : "none"} />
                       </button>
-                      <span className="text-[10px] font-bold text-slate-600 mt-2 uppercase tracking-tight bg-white px-3 py-0.5 rounded-full shadow-sm border border-slate-100">Beranda</span>
+                      <span className="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-tight bg-white px-2 py-0.5 rounded-full shadow-sm border border-slate-100">Beranda</span>
                  </div>
 
                  {/* Right Items */}
                  <div className="flex gap-8">
-                     {/* Menu Tanya (WhatsApp Modal) */}
                      <button onClick={handleWhatsAppClick} className="flex flex-col items-center gap-1 text-slate-400 hover:text-green-600 transition-all">
-                         <MessageCircleQuestion size={22} strokeWidth={2} />
-                         <span className="text-[10px] font-bold uppercase tracking-tight">Tanya?</span>
+                         <MessageCircleQuestion size={20} strokeWidth={2} />
+                         <span className="text-[9px] font-bold uppercase tracking-tight">Tanya?</span>
                      </button>
                      
-                     {/* Menu Sosmed (Instagram Modal) */}
                      <button onClick={() => setShowSosmedModal(true)} className="flex flex-col items-center gap-1 text-slate-400 hover:text-pink-600 transition-all">
-                         <Instagram size={22} strokeWidth={2} />
-                         <span className="text-[10px] font-bold uppercase tracking-tight">Sosmed</span>
+                         <Instagram size={20} strokeWidth={2} />
+                         <span className="text-[9px] font-bold uppercase tracking-tight">Sosmed</span>
                      </button>
                  </div>
 
